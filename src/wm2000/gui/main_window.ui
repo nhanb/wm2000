@@ -44,6 +44,9 @@
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuExport">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>E&amp;xport</string>
     </property>
@@ -51,6 +54,9 @@
     <addaction name="actionChoose"/>
    </widget>
    <widget class="QMenu" name="menuPublish">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>P&amp;ublish</string>
     </property>
@@ -73,6 +79,9 @@
    </property>
   </action>
   <action name="actionSave_As">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset theme="document-save-as"/>
    </property>
@@ -124,7 +133,7 @@
     <iconset theme="document-new"/>
    </property>
    <property name="text">
-    <string>New...</string>
+    <string>&amp;New...</string>
    </property>
   </action>
  </widget>
