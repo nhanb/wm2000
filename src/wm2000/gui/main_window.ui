@@ -14,10 +14,26 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
-      <widget class="QWidget" name="page"/>
+      <widget class="QWidget" name="pageEmpty">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QLabel" name="labelNoFileChosen">
+          <property name="text">
+           <string>No file chosen. Click File/New or File/Open and pick a wm2k file to start.</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+          <property name="textInteractionFlags">
+           <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="page_2"/>
      </widget>
     </item>
