@@ -1,9 +1,9 @@
 import sys
 from pathlib import Path
 
-from PySide6 import QtCore as qtc
-from PySide6 import QtGui as qtg
-from PySide6 import QtWidgets as qtw
+from PySide6.QtCore import Signal
+from PySide6.QtGui import QKeySequence
+from PySide6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMessageBox
 
 from wm2000.gui.main_window import Ui_MainWindow
 from wm2000.persistence import Database
@@ -12,8 +12,8 @@ EXTENSION = ".wm2k"
 APP_NAME = "WebMaker2000"
 
 
-class MainWindow(qtw.QMainWindow):
-    signalFileChosen = qtc.Signal(Path)
+class MainWindow(QMainWindow):
+    signalFileChosen = Signal(Path)
 
     def __init__(self, app, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -36,26 +36,26 @@ class MainWindow(qtw.QMainWindow):
     def setup_shortcuts(self):
         # Since Qt6 Designer doesn't support using StandardKey sequences,
         # let's set them up here.
-        self.ui.actionNew.setShortcut(qtg.QKeySequence.StandardKey.New)
-        self.ui.actionOpen.setShortcut(qtg.QKeySequence.StandardKey.Open)
-        self.ui.actionSave_As.setShortcut(qtg.QKeySequence.StandardKey.SaveAs)
-        self.ui.actionQuit.setShortcut(qtg.QKeySequence.StandardKey.Quit)
+        self.ui.actionNew.setShortcut(QKeySequence.StandardKey.New)
+        self.ui.actionOpen.setShortcut(QKeySequence.StandardKey.Open)
+        self.ui.actionSave_As.setShortcut(QKeySequence.StandardKey.SaveAs)
+        self.ui.actionQuit.setShortcut(QKeySequence.StandardKey.Quit)
 
     def action_quit(self):
-        msgbox = qtw.QMessageBox(self)
-        msgbox.setIcon(qtw.QMessageBox.Icon.Warning)
+        msgbox = QMessageBox(self)
+        msgbox.setIcon(QMessageBox.Icon.Warning)
         msgbox.setWindowTitle("Quitting")
         msgbox.setText("Are you sure you want to quit?")
         msgbox.setStandardButtons(
-            qtw.QMessageBox.StandardButton.Ok | qtw.QMessageBox.StandardButton.Cancel
+            QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel
         )
         result = msgbox.exec()
-        if result == qtw.QMessageBox.StandardButton.Ok:
+        if result == QMessageBox.StandardButton.Ok:
             self.app.quit()
         self.ui.statusbar.showMessage("Quit cancelled.")
 
     def action_new(self):
-        file_name, _ = qtw.QFileDialog.getSaveFileName(
+        file_name, _ = QFileDialog.getSaveFileName(
             self,
             caption="New File",
             filter=f"WebMaker2000 files (*{EXTENSION})",
@@ -74,7 +74,7 @@ class MainWindow(qtw.QMainWindow):
         self.signalFileChosen.emit(path)
 
     def action_open(self):
-        file_name, _ = qtw.QFileDialog.getOpenFileName(
+        file_name, _ = QFileDialog.getOpenFileName(
             self,
             caption="Open File",
             filter=f"WebMaker2000 files (*{EXTENSION})",
@@ -98,7 +98,7 @@ class MainWindow(qtw.QMainWindow):
 
 
 def main():
-    app = qtw.QApplication(sys.argv)
+    app = QApplication(sys.argv)
 
     window = MainWindow(app)
     window.show()
