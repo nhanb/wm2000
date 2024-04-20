@@ -1,7 +1,7 @@
-from pathlib import Path
 import re
 import sqlite3
 from importlib.resources import files
+from pathlib import Path
 
 
 class Database:

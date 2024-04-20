@@ -12,7 +12,13 @@ pyside6 = "^6.7.0"
 [tool.poetry.scripts]
 wm2k = "wm2000.main:main"
 
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+exclude = ["src/wm2000/gui/*.py"]
+src = ["src"]
+
+[tool.ruff.lint]
+extend-select = ["I"]  # also format import statements

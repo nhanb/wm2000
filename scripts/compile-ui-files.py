@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-import subprocess
 import os
+import subprocess
 from pathlib import Path
 from time import perf_counter
 
