@@ -46,9 +46,11 @@ class MainWindow(qtw.QMainWindow):
         msgbox.setIcon(qtw.QMessageBox.Icon.Warning)
         msgbox.setWindowTitle("Quitting")
         msgbox.setText("Are you sure you want to quit?")
-        msgbox.setStandardButtons(qtw.QMessageBox.Ok | qtw.QMessageBox.Cancel)
+        msgbox.setStandardButtons(
+            qtw.QMessageBox.StandardButton.Ok | qtw.QMessageBox.StandardButton.Cancel
+        )
         result = msgbox.exec()
-        if result == qtw.QMessageBox.Ok:
+        if result == qtw.QMessageBox.StandardButton.Ok:
             self.app.quit()
         self.ui.statusbar.showMessage("Quit cancelled.")
 
