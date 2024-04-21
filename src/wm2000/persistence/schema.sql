@@ -18,33 +18,17 @@ create table site (
     id integer primary key check (id = 0), -- ensures single row
     title text not null default 'My Site',
     tagline text not null default 'Let''s start this thing off right.',
-    export_to text not null default '',
-
-    neocities_user text not null default '',
-    neocities_password text not null default ''
+    export_to text not null default ''
 ) strict;
 insert into site(id) values(0);
 
-create table article (
+create table post (
     id integer primary key,
-    slug text unique check (slug regexp '^[\w\-\.~]+$') not null,
+    slug text unique not null,
     title text unique not null,
     content text not null default '',
     created_at datetime not null default (strftime('%Y-%m-%d %H:%M:%SZ')),
     updated_at datetime default null,
     is_draft boolean not null default true,
-    is_page boolean not null default false
+    show_in_feed boolean not null default true
 );
-create view post as select * from article where is_page = false order by id desc;
-create view page as select * from article where is_page = true order by id desc;
-
-create table attachment (
-    id integer primary key,
-    name text not null check (name regexp '^[\w\-\.~]+$'),
-    data blob not null,
-
-    article_id integer not null,
-    foreign key (article_id) references article(id) on delete cascade,
-
-    unique(article_id, name)
-) strict;

@@ -87,7 +87,7 @@ class MainWindow(QMainWindow):
         self.signalFileChosen.emit(path)
 
     def signal_file_chosen(self, path: Path):
-        self.setWindowTitle(f"{path} - {APP_NAME}")
+        self.setWindowTitle(f"{path.name} - {APP_NAME}")
 
         # Enable actions that require a chosen file:
         self.ui.menuExport.setEnabled(True)
