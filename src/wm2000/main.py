@@ -13,7 +13,7 @@ APP_NAME = "WebMaker2000"
 
 
 class MainWindow(QMainWindow):
-    signalFileChosen = Signal(Path)
+    signalFileChosen = Signal(Path, str)
 
     def __init__(self, app, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -29,6 +29,7 @@ class MainWindow(QMainWindow):
         self.ui.actionQuit.triggered.connect(self.action_quit)
         self.ui.actionNew.triggered.connect(self.action_new)
         self.ui.actionOpen.triggered.connect(self.action_open)
+        self.ui.actionSave_As.triggered.connect(self.action_save_as)
 
         # Custom signals
         self.signalFileChosen.connect(self.signal_file_chosen)
@@ -71,7 +72,7 @@ class MainWindow(QMainWindow):
             path.unlink()
 
         self.app.db = Database(path, init=True)
-        self.signalFileChosen.emit(path)
+        self.signalFileChosen.emit(path, "Created")
 
     def action_open(self):
         file_name, _ = QFileDialog.getOpenFileName(
@@ -84,9 +85,30 @@ class MainWindow(QMainWindow):
 
         path = Path(file_name)
         self.app.db = Database(path, init=False)
-        self.signalFileChosen.emit(path)
+        self.signalFileChosen.emit(path, "Opened")
 
-    def signal_file_chosen(self, path: Path):
+    def action_save_as(self):
+        file_name, _ = QFileDialog.getSaveFileName(
+            self,
+            caption="Save As",
+            filter=f"WebMaker2000 files (*{EXTENSION})",
+        )
+        if not file_name:
+            return
+
+        if not file_name.endswith(EXTENSION):
+            file_name += EXTENSION
+
+        path = Path(file_name)
+        if path.is_file():
+            path.unlink()
+
+        self.app.db.save_as(path)
+        del self.app.db
+        self.app.db = Database(path, init=False)
+        self.signalFileChosen.emit(path, "Saved as")
+
+    def signal_file_chosen(self, path: Path, message: str):
         self.setWindowTitle(f"{path.name} - {APP_NAME}")
 
         # Enable actions that require a chosen file:
@@ -94,7 +116,7 @@ class MainWindow(QMainWindow):
         self.ui.menuPublish.setEnabled(True)
         self.ui.actionSave_As.setEnabled(True)
 
-        self.ui.statusbar.showMessage(f"Chosen file: {path}")
+        self.ui.statusbar.showMessage(f"{message} {path}")
 
 
 def main():
