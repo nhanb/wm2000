@@ -12,6 +12,9 @@ pyside6 = "^6.7.0"
 [tool.poetry.scripts]
 wm2k = "wm2000.main:main"
 
+[tool.poetry.group.dev.dependencies]
+ipdb = "^0.13.13"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

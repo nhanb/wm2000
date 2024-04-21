@@ -16,9 +16,10 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QMainWindow,
-    QMenu, QMenuBar, QSizePolicy, QStackedWidget,
-    QStatusBar, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QHBoxLayout, QHeaderView, QLabel,
+    QMainWindow, QMenu, QMenuBar, QSizePolicy,
+    QStackedWidget, QStatusBar, QTableView, QVBoxLayout,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -60,21 +61,28 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.stackedWidget = QStackedWidget(self.centralwidget)
         self.stackedWidget.setObjectName(u"stackedWidget")
-        self.pageEmpty = QWidget()
-        self.pageEmpty.setObjectName(u"pageEmpty")
-        self.verticalLayout_2 = QVBoxLayout(self.pageEmpty)
+        self.emptyView = QWidget()
+        self.emptyView.setObjectName(u"emptyView")
+        self.verticalLayout_2 = QVBoxLayout(self.emptyView)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.labelNoFileChosen = QLabel(self.pageEmpty)
-        self.labelNoFileChosen.setObjectName(u"labelNoFileChosen")
-        self.labelNoFileChosen.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.labelNoFileChosen.setTextInteractionFlags(Qt.TextInteractionFlag.LinksAccessibleByMouse|Qt.TextInteractionFlag.TextSelectableByMouse)
+        self.noFileChosenLabel = QLabel(self.emptyView)
+        self.noFileChosenLabel.setObjectName(u"noFileChosenLabel")
+        self.noFileChosenLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.noFileChosenLabel.setTextInteractionFlags(Qt.TextInteractionFlag.LinksAccessibleByMouse|Qt.TextInteractionFlag.TextSelectableByMouse)
 
-        self.verticalLayout_2.addWidget(self.labelNoFileChosen)
+        self.verticalLayout_2.addWidget(self.noFileChosenLabel)
 
-        self.stackedWidget.addWidget(self.pageEmpty)
-        self.page_2 = QWidget()
-        self.page_2.setObjectName(u"page_2")
-        self.stackedWidget.addWidget(self.page_2)
+        self.stackedWidget.addWidget(self.emptyView)
+        self.indexView = QWidget()
+        self.indexView.setObjectName(u"indexView")
+        self.verticalLayout = QVBoxLayout(self.indexView)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.pagesTable = QTableView(self.indexView)
+        self.pagesTable.setObjectName(u"pagesTable")
+
+        self.verticalLayout.addWidget(self.pagesTable)
+
+        self.stackedWidget.addWidget(self.indexView)
 
         self.horizontalLayout.addWidget(self.stackedWidget)
 
@@ -127,7 +135,7 @@ class Ui_MainWindow(object):
         self.actionPublish_to_gitlab_com_nhanb.setText(QCoreApplication.translate("MainWindow", u"Publish to &gitlab.com/nhanb", None))
         self.actionManage.setText(QCoreApplication.translate("MainWindow", u"&Manage...", None))
         self.actionNew.setText(QCoreApplication.translate("MainWindow", u"&New...", None))
-        self.labelNoFileChosen.setText(QCoreApplication.translate("MainWindow", u"No file chosen. Click File/New or File/Open and pick a wm2k file to start.", None))
+        self.noFileChosenLabel.setText(QCoreApplication.translate("MainWindow", u"No file chosen. Click File/New or File/Open and pick a wm2k file to start.", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"&File", None))
         self.menuExport.setTitle(QCoreApplication.translate("MainWindow", u"E&xport", None))
         self.menuPublish.setTitle(QCoreApplication.translate("MainWindow", u"P&ublish", None))

@@ -1,7 +1,14 @@
 import sys
 from pathlib import Path
+from typing import Union
 
-from PySide6.QtCore import Signal
+from PySide6.QtCore import (
+    QAbstractTableModel,
+    QModelIndex,
+    QPersistentModelIndex,
+    Qt,
+    Signal,
+)
 from PySide6.QtGui import QKeySequence
 from PySide6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMessageBox
 
@@ -116,7 +123,62 @@ class MainWindow(QMainWindow):
         self.ui.menuPublish.setEnabled(True)
         self.ui.actionSave_As.setEnabled(True)
 
+        # Setup index view with proper model
+        self.ui.stackedWidget.setCurrentWidget(self.ui.indexView)
+        self.ui.pagesTable.setModel(PagesTableModel(self.app.db))
+
         self.ui.statusbar.showMessage(f"{message} {path}")
+
+
+class PagesTableModel(QAbstractTableModel):
+    db_columns = (
+        "id",
+        "slug",
+        "title",
+        "created_at",
+        "updated_at",
+        "is_draft",
+        "show_in_feed",
+    )
+
+    def __init__(self, db: Database):
+        super().__init__()
+        self._db = db
+        self._data = []
+        self.refresh_data()
+
+    def refresh_data(self):
+        pages = self._db.run_sql(
+            f"SELECT {', '.join(self.db_columns)}"
+            " FROM post"
+            " ORDER BY created_at DESC;",
+            [],
+        )
+        print(">> pages:", pages)
+
+    def data(self, index, role=Qt.ItemDataRole.DisplayRole):
+        if role == Qt.ItemDataRole.DisplayRole:
+            # See below for the nested-list data structure.
+            # .row() indexes into the outer list,
+            # .column() indexes into the sub-list
+            return self._data[index.row()][index.column()]
+
+    def rowCount(
+        self,
+        parent: Union[QModelIndex, QPersistentModelIndex] = QModelIndex(),
+    ) -> int:
+        # The length of the outer list.
+        return len(self._data)
+
+    def columnCount(
+        self,
+        parent: Union[QModelIndex, QPersistentModelIndex] = QModelIndex(),
+    ) -> int:
+        # The following takes the first sub-list, and returns
+        # the length (only works if all rows are an equal length)
+        if rowCount == 0:
+            return 0
+        return len(self._data[0])
 
 
 def main():

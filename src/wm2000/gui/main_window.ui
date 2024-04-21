@@ -17,10 +17,10 @@
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
-      <widget class="QWidget" name="pageEmpty">
+      <widget class="QWidget" name="emptyView">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QLabel" name="labelNoFileChosen">
+         <widget class="QLabel" name="noFileChosenLabel">
           <property name="text">
            <string>No file chosen. Click File/New or File/Open and pick a wm2k file to start.</string>
           </property>
@@ -34,7 +34,13 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page_2"/>
+      <widget class="QWidget" name="indexView">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QTableView" name="pagesTable"/>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>

@@ -28,6 +28,12 @@ class Database:
     def save_as(self, path: Path):
         self.conn.execute("VACUUM INTO ?;", [str(path)])
 
+    def run_sql(self, query, *args, **kwargs):
+        cursor = self.conn.execute(query, *args, **kwargs)
+        result = cursor.fetchall()
+        cursor.close()
+        return result
+
 
 def regexp(expr, item):
     reg = re.compile(expr)
