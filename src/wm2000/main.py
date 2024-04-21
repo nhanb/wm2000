@@ -10,7 +10,13 @@ from PySide6.QtCore import (
     Signal,
 )
 from PySide6.QtGui import QKeySequence
-from PySide6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMessageBox
+from PySide6.QtWidgets import (
+    QApplication,
+    QFileDialog,
+    QHeaderView,
+    QMainWindow,
+    QMessageBox,
+)
 
 from wm2000.gui.main_window import Ui_MainWindow
 from wm2000.persistence import Database
@@ -126,30 +132,44 @@ class MainWindow(QMainWindow):
         # Setup index view with proper model
         self.ui.stackedWidget.setCurrentWidget(self.ui.indexView)
         self.ui.pagesTable.setModel(PagesTableModel(self.app.db))
+        self.ui.pagesTable.horizontalHeader().setSectionResizeMode(
+            QHeaderView.ResizeMode.Stretch
+        )
 
         self.ui.statusbar.showMessage(f"{message} {path}")
 
 
 class PagesTableModel(QAbstractTableModel):
-    db_columns = (
-        "id",
-        "slug",
-        "title",
-        "created_at",
-        "updated_at",
-        "is_draft",
-        "show_in_feed",
+    header_column_mapping = (
+        ("ID", "id"),
+        ("Slug", "slug"),
+        ("Title", "title"),
+        ("Created at", "created_at"),
+        ("Updated at", "updated_at"),
+        ("Draft", "is_draft"),
+        ("Show in feed", "show_in_feed"),
     )
 
     def __init__(self, db: Database):
         super().__init__()
         self._db = db
         self._data = []
+        self._data = [
+            [
+                "ID",
+                "Slug",
+                "Title",
+                "Created at",
+                "Updated at",
+                "Draft",
+                "Show in feed",
+            ]
+        ]
         self.refresh_data()
 
     def refresh_data(self):
         pages = self._db.run_sql(
-            f"SELECT {', '.join(self.db_columns)}"
+            f"SELECT {', '.join(column for _, column in self.header_column_mapping)}"
             " FROM post"
             " ORDER BY created_at DESC;",
             [],
@@ -176,9 +196,23 @@ class PagesTableModel(QAbstractTableModel):
     ) -> int:
         # The following takes the first sub-list, and returns
         # the length (only works if all rows are an equal length)
-        if rowCount == 0:
+        if self.rowCount() == 0:
             return 0
         return len(self._data[0])
+
+    def headerData(
+        self,
+        section: int,
+        orientation: Qt.Orientation,
+        role=Qt.ItemDataRole.DisplayRole,
+    ) -> str:
+        if (
+            orientation == Qt.Orientation.Horizontal
+            and role == Qt.ItemDataRole.DisplayRole
+        ):
+            return self.header_column_mapping[section][0]
+
+        return super().headerData(section, orientation, role)
 
 
 def main():
