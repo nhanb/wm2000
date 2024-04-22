@@ -13,7 +13,6 @@ from PySide6.QtGui import QKeySequence
 from PySide6.QtWidgets import (
     QApplication,
     QFileDialog,
-    QHeaderView,
     QMainWindow,
     QMessageBox,
 )
@@ -132,9 +131,6 @@ class MainWindow(QMainWindow):
         # Setup index view with proper model
         self.ui.stackedWidget.setCurrentWidget(self.ui.indexView)
         self.ui.pagesTable.setModel(PagesTableModel(self.app.db))
-        self.ui.pagesTable.horizontalHeader().setSectionResizeMode(
-            QHeaderView.ResizeMode.Stretch
-        )
 
         self.ui.statusbar.showMessage(f"{message} {path}")
 
@@ -154,17 +150,6 @@ class PagesTableModel(QAbstractTableModel):
         super().__init__()
         self._db = db
         self._data = []
-        self._data = [
-            [
-                "ID",
-                "Slug",
-                "Title",
-                "Created at",
-                "Updated at",
-                "Draft",
-                "Show in feed",
-            ]
-        ]
         self.refresh_data()
 
     def refresh_data(self):
@@ -175,27 +160,22 @@ class PagesTableModel(QAbstractTableModel):
             [],
         )
         print(">> pages:", pages)
+        # TODO
 
     def data(self, index, role=Qt.ItemDataRole.DisplayRole):
         if role == Qt.ItemDataRole.DisplayRole:
-            # See below for the nested-list data structure.
-            # .row() indexes into the outer list,
-            # .column() indexes into the sub-list
             return self._data[index.row()][index.column()]
 
     def rowCount(
         self,
         parent: Union[QModelIndex, QPersistentModelIndex] = QModelIndex(),
     ) -> int:
-        # The length of the outer list.
         return len(self._data)
 
     def columnCount(
         self,
         parent: Union[QModelIndex, QPersistentModelIndex] = QModelIndex(),
     ) -> int:
-        # The following takes the first sub-list, and returns
-        # the length (only works if all rows are an equal length)
         if self.rowCount() == 0:
             return 0
         return len(self._data[0])
