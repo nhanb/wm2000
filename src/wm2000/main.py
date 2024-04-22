@@ -15,9 +15,11 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QMainWindow,
     QMessageBox,
+    QWidget,
 )
 
 from wm2000.gui.main_window import Ui_MainWindow
+from wm2000.gui.pages_index import Ui_pagesIndex
 from wm2000.persistence import Database
 
 EXTENSION = ".wm2k"
@@ -128,11 +130,24 @@ class MainWindow(QMainWindow):
         self.ui.menuPublish.setEnabled(True)
         self.ui.actionSave_As.setEnabled(True)
 
-        # Setup index view with proper model
-        self.ui.stackedWidget.setCurrentWidget(self.ui.indexView)
-        self.ui.pagesTable.setModel(PagesTableModel(self.app.db))
+        # Setup pagesIndex view with proper model
+        old_pagesIndex = getattr(self, "pagesIndex", None)
+        if old_pagesIndex:
+            self.ui.stackedWidget.removeWidget(self.pagesIndex)
+            del self.pagesIndex
+        self.pagesIndex = PagesIndex(self.app)
+        self.ui.stackedWidget.addWidget(self.pagesIndex)
+        self.ui.stackedWidget.setCurrentWidget(self.pagesIndex)
 
         self.ui.statusbar.showMessage(f"{message} {path}")
+
+
+class PagesIndex(QWidget):
+    def __init__(self, app, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ui = Ui_pagesIndex()
+        self.ui.setupUi(self)
+        self.ui.pagesTable.setModel(PagesTableModel(app.db))
 
 
 class PagesTableModel(QAbstractTableModel):

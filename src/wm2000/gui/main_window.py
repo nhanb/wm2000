@@ -16,10 +16,9 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QHeaderView, QLabel,
-    QMainWindow, QMenu, QMenuBar, QPushButton,
-    QSizePolicy, QSpacerItem, QStackedWidget, QStatusBar,
-    QTableView, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QMainWindow,
+    QMenu, QMenuBar, QSizePolicy, QStackedWidget,
+    QStatusBar, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -73,30 +72,6 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addWidget(self.noFileChosenLabel)
 
         self.stackedWidget.addWidget(self.emptyView)
-        self.indexView = QWidget()
-        self.indexView.setObjectName(u"indexView")
-        self.verticalLayout = QVBoxLayout(self.indexView)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.pagesTable = QTableView(self.indexView)
-        self.pagesTable.setObjectName(u"pagesTable")
-
-        self.verticalLayout.addWidget(self.pagesTable)
-
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.addBtn = QPushButton(self.indexView)
-        self.addBtn.setObjectName(u"addBtn")
-
-        self.horizontalLayout_2.addWidget(self.addBtn)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_2.addItem(self.horizontalSpacer)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
-
-        self.stackedWidget.addWidget(self.indexView)
 
         self.horizontalLayout.addWidget(self.stackedWidget)
 
@@ -150,7 +125,6 @@ class Ui_MainWindow(object):
         self.actionManage.setText(QCoreApplication.translate("MainWindow", u"&Manage...", None))
         self.actionNew.setText(QCoreApplication.translate("MainWindow", u"&New...", None))
         self.noFileChosenLabel.setText(QCoreApplication.translate("MainWindow", u"No file chosen. Click File/New or File/Open and pick a wm2k file to start.", None))
-        self.addBtn.setText(QCoreApplication.translate("MainWindow", u"Add page...", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"&File", None))
         self.menuExport.setTitle(QCoreApplication.translate("MainWindow", u"E&xport", None))
         self.menuPublish.setTitle(QCoreApplication.translate("MainWindow", u"P&ublish", None))
